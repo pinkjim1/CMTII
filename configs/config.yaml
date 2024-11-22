@@ -1,6 +1,6 @@
 model_path:
-  clip_model_path: "model/CLIP"
-  sd_model_path: "model/bk-sdm-v2-small"
+  clip_model_path: "models/CLIP"
+  sd_model_path: "models/bk-sdm-v2-small"
   save_model_path: "new_model"
 
 prompt_model:

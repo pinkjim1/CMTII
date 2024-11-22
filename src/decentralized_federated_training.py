@@ -1,8 +1,6 @@
 import yaml
 def decentralized_federated_learning(clients, config_file):
-    """
-    去中心化联邦学习的主要流程。
-    """
+
     with open(config_file, 'r') as file:
         config = yaml.safe_load(file)
     num_rounds=config['prompt_model']['round']

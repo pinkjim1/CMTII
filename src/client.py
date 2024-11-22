@@ -83,7 +83,7 @@ class Client:
             ]
             self.k=100
         else:
-            with open('P_tuning/Tinyimagenet.json', 'r', encoding='utf-8') as file:
+            with open('src/Tinyimagenet.json', 'r', encoding='utf-8') as file:
                 self.type_list= json.load(file)
             self.k=200
 
@@ -108,7 +108,7 @@ class Client:
                 for file in sorted(files, key=numeric_sort):
                     file_path = os.path.join(root, file)
                     self.test_image.append(file_path)
-            with open('P_tuning/Tinylist.json', 'r', encoding='utf-8') as file:
+            with open('src/Tinylist.json', 'r', encoding='utf-8') as file:
                 label_dict= json.load(file)
             val_labal_dir=os.path.join('dataset', self.dataset_type, 'rawdata', 'tiny-imagenet-200', 'val', 'val_annotations.txt')
             self.test_label = []
