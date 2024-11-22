@@ -52,7 +52,7 @@ python generate_tiny_imagenet.py noniid - dir # for practical noniid and unbalan
 - If you want to run this experiment, you need to download two models: CLIP and BK-SDM.
 - clip: https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K
 - BK-SDM-v2-small: https://huggingface.co/nota-ai/bk-sdm-v2-small
-
+- After downloading, please place the files into the models folder.
 
 ## Federated Training
 
