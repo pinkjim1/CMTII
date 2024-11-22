@@ -1,0 +1,44 @@
+model_path:
+  clip_model_path: "model/CLIP"
+  sd_model_path: "model/bk-sdm-v2-small"
+  save_model_path: "new_model"
+
+prompt_model:
+  lr: 0.001
+  batch_size: 8
+  num_epochs: 2
+  weight_decay: 0.001
+  save_freq: 2
+  round: 10
+  snr_gamma: 1
+
+inference_model:
+  image_num: 2
+  num_inference_steps: 50
+  guidance_scale: 7.5
+  save_image_path: "new_image"
+
+image_encoder:
+  lr: 0.0001
+  batch_size: 8
+  num_epochs: 2
+  weight_decay: 0.001
+  save_freq: 2
+  lora_r: 8
+  lora_alpha: 16
+  lora_dropout: 0.1
+  target_modules: ['k_proj', 'v_proj', 'q_proj']
+  generated_images_weights: 0.001
+
+
+data:
+  dataset_type: "Tiny-imagenet"
+
+client:
+  num: 20
+
+test_result:
+  test_result_address: "results.csv"
+
+
+
