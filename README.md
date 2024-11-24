@@ -1,4 +1,4 @@
-# Cross-Modality Federated Learning by Lightweight Stable Diffusion
+# Federated Cross-Modality Text-Image Interchange by Lightweight Stable Diffusion
 
 
 ---
@@ -6,9 +6,22 @@
 ## Project Overview
 
 
-![](image/image.png)
+![](image/illustrate.svg)
 
-- This experiment focuses on optimizing data flow efficiency while maintaining data privacy and security in distributed systems. The core idea is to differentiate between textual data and visual data based on their sensitivity and volume, applying tailored circulation rules for each.
+- This project focuses on enhancing the flow rate between 
+single-modal visual data in federated learning while avoiding large-scale centralized transmission of visual
+data for model training. The core idea is to leverage the data multi-modality.
+As illustrated in the figure above, we differentiate the textual and visual modality 
+based on their sensitivity and volume.
+We propose a Cross-Modality Text-Image interchange (CMTII)
+desensitization method to ensure the privacy and security of visual data. 
+The specific idea is to limit the transmition of sensitive single-modal visual data
+ for desensitization prompt learning in client environments. It can directly reduce 
+the flow rate of sensitive visual information, protect the data pravicy of all participants.
+Non-sensitive word embeddings obtained through desensitization prompt learning are transmitted and broadcasted, 
+and after the client receives the word embeddings, they regenerate diversified visual images and jointly 
+balance local data to train the optimal personalized model in federated learing.
+
 
 This project includes:
 - **Data Partitioning**: 
@@ -26,7 +39,6 @@ conda create -n your_name python=3.8
 conda activate your_name
 git clone https://github.com/pinkjim1/CMFL
 cd BK-SDM
-pip install -r requirements.txt
 ```
 
 Install dependencies:
@@ -54,14 +66,35 @@ python generate_tiny_imagenet.py noniid - dir # for practical noniid and unbalan
 - BK-SDM-v2-small: https://huggingface.co/nota-ai/bk-sdm-v2-small
 - After downloading, please place the files into the models folder.
 
-## Federated Training
+## Federated Training/Testing
 
 - The parameter file is located in `p_tuning/config.yaml`. 
 - You can directly run `main.py` in the root folder to start training.The overall workflow is as follows:
-  1. **Local Training on Each Client:** Each client performs local training using its private data. During this step, all other parameters of the CLIP model are kept fixed, and only the embeddings corresponding to specific images are trained.
+  1. **Local Training on Each Client:** Each client performs local training using its private data. During this step, all parameters of the CLIP model are kept fixed, and only the embeddings corresponding to specific images are trained.
+  ```
+  # Client Object
+  171  def prompt_train(self):
+           ...
+  ```
+  
   2. **Broadcasting Embeddings:** After each round of training, the locally trained embeddings are broadcast to all other clients.
+  ```
+  # Client Object
+  395  def exchange_message_and_generate(self, other_clients):
+           ...
+  ```
   3. **Image Generation Using Embeddings:** Upon receiving embeddings from different clients, the BKSDM diffusion model is used to generate images based on these embeddings.
+  ```
+  # Client Object
+  171  def prompt_train(self):
+           ...
+  ```
   4. **Training the Image Encoder:** The generated image-embedding pairs are mixed with the local image-text pairs, and the combined dataset is used to train the image encoder of the CLIP model.
+  ```
+  # Client Object
+  340  def image_encoder_train(self):
+           ...
+  ```
 
 
 
