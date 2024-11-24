@@ -61,6 +61,7 @@ class Client:
         self.generated_images_weights=config['image_encoder']['generated_images_weights']
 
         self.test_result_address=config['test_result']['test_result_address']
+        self.seed=config['client']['seed']
 
         if self.dataset_type == 'Cifar10':
             self.type_list = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
@@ -309,8 +310,8 @@ class Client:
         images_pair=[]
         for i in this_round_message:
             prompt=[f'a photo of a {i}']
-            generator = None
             for j in range(self.image_num):
+                generator = torch.manual_seed(self.seed+j)
                 result = pipeline(prompt, guidance_scale=self.guidance_scale, num_inference_steps=self.num_inference_steps,
                       generator=generator)
                 tem_save_path = os.path.join(self.save_image_path, str(self.client_id), str(self.round)+"_round",i, f"{j}.png")

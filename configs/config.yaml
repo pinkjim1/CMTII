@@ -21,7 +21,7 @@ inference_model:
 image_encoder:
   lr: 0.0001
   batch_size: 8
-  num_epochs: 2
+  num_epochs: 1
   weight_decay: 0.001
   save_freq: 2
   lora_r: 8
@@ -36,9 +36,11 @@ data:
 
 client:
   num: 20
+  seed: 130
 
 test_result:
   test_result_address: "results.csv"
+  writer: "runs/federated_learning10"
 
 
 

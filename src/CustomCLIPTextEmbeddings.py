@@ -117,5 +117,8 @@ class CustomCLIPTextEmbeddings(CLIPTextEmbeddings):
         except RuntimeError as e:
             print(e)
 
-        return embeddings
+        try:
+            return embeddings
+        except UnboundLocalError as e:
+            print(e)
 
