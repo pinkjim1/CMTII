@@ -49,7 +49,7 @@ pip install -r requirements.txt
 ## Data Partitioning
 The code for generating data distributions is sourced from the following Git repository  https://github.com/TsingZ0/PFLlib
 
-For details on the generation method, please refer to the repository. In this experiment, the same method is used to generate data for different clients.
+For details on the generation method, please refer to the repository. In this experiment, the same method is used to decentrelize data (The datasets include  CIFAR-10, CIFAR-100 and Tiny-Imagenet) for different clients. 
 
 #### Example for Tiny-imagenet:
 
@@ -86,7 +86,7 @@ python generate_tiny_imagenet.py noniid - dir # for practical noniid and unbalan
   3. **Image Generation Using Embeddings:** Upon receiving embeddings from different clients, the BKSDM diffusion model is used to generate images based on these embeddings.
   ```
   # Client Object
-  171  def prompt_train(self):
+  306  def inference(self, this_round_message):
            ...
   ```
   4. **Training the Image Encoder:** The generated image-embedding pairs are mixed with the local image-text pairs, and the combined dataset is used to train the image encoder of the CLIP model.
@@ -94,6 +94,13 @@ python generate_tiny_imagenet.py noniid - dir # for practical noniid and unbalan
   # Client Object
   340  def image_encoder_train(self):
            ...
+  ```
+  5. **Test with the new image encoder.** :
+  ```
+  # Client Object
+  405 def model_test(self, is_trained=False):
+          ...
+
   ```
 
 
