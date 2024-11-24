@@ -35,10 +35,10 @@ This project includes:
 
 ## Installation
 ```bash
-conda create -n your_name python=3.8
-conda activate your_name
-git clone https://github.com/pinkjim1/CMFL
-cd BK-SDM
+conda create -n CMTII python=3.8
+conda activate CMTII
+git clone https://github.com/pinkjim1/CMTII
+cd CMTII
 ```
 
 Install dependencies:
@@ -68,7 +68,7 @@ python generate_tiny_imagenet.py noniid - dir # for practical noniid and unbalan
 
 ## Federated Training/Testing
 
-- The parameter file is located in `p_tuning/config.yaml`. 
+- The parameter file is located in `configs/config.yaml`. 
 - You can directly run `main.py` in the root folder to start training.The overall workflow is as follows:
   1. **Local Training on Each Client:** Each client performs local training using its private data. During this step, all parameters of the CLIP model are kept fixed, and only the embeddings corresponding to specific images are trained.
   ```
