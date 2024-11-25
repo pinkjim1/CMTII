@@ -41,7 +41,7 @@ client:
 
 test_result:
   test_result_address: "results.csv"
-  writer: "runs/federated_learning11"
+  writer: "runs/federated_learning12"
 
 
 

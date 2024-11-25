@@ -150,10 +150,10 @@ class Client:
         y_train = torch.Tensor(train_data['y']).type(torch.int64).to('cpu')
         to_pil = transforms.ToPILImage()
         x_train = (x_train + 1) / 2
-        image = [to_pil(x_train[i]) for i in range(len(x_train))]
+        images = [to_pil(x_train[i]) for i in range(len(x_train))]
         data_dir = os.path.join('dataset', self.dataset_type, type, str(self.client_id))
         image_paths=[]
-        for i, image in enumerate(image):
+        for i, image in enumerate(images):
             image_path=os.path.join(data_dir, f'image_{i}.png')
             os.makedirs(os.path.dirname(image_path), exist_ok=True)
             image.save(image_path)

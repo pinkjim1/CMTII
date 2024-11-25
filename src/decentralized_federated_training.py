@@ -14,14 +14,14 @@ def decentralized_federated_learning(clients, config_file):
         print(f"Round {round+1}/{num_rounds}")
 
         # local train
-        for client in new_clients:
-            if round ==0 and client.client_id==0:
+        for i, client in enumerate(new_clients):
+            if round ==0 and i==0:
                 client.model_test(is_trained=False)
             client.prompt_train()
 
         # fd train
         for i, client in enumerate(new_clients):
-            client.exchange_message_and_generate([c for c in clients if c != client])
+            client.exchange_message_and_generate([c for c in new_clients if c != client])
             client.image_encoder_train()
             if round%2==0 and i<6:
                 client.model_test(is_trained=True)
