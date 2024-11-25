@@ -55,9 +55,11 @@ For details on the generation method, please refer to the repository. In this ex
 
 ```bash
 cd ./dataset
-python generate_tiny_imagenet.py noniid - dir # for practical noniid and unbalanced scenario
+python generate_tiny_imagenet.py noniid - dir # for practical noniid,  unbalanced scenario and Dirichlet-based distribution 
 
 ```
+
+- If you want to modify the Dirichlet beta, please open the `dataset/dataset_utils.py` file and adjust the `alpha` parameter within it.
 
 ## Model Download
 
