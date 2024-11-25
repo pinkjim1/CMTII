@@ -10,8 +10,8 @@ def decentralized_federated_learning(clients, config_file):
 
         # local train
         for client in clients:
-            if round ==0 and client.client_id==0:
-                client.model_test(is_trained=False)
+            # if round ==0 and client.client_id==0:
+            #     client.model_test(is_trained=False)
             client.prompt_train()
 
         # fd train

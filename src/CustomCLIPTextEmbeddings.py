@@ -58,11 +58,10 @@ class VirtualTokenManager(nn.Module):
                 else:
                     break
             tem_tensor=self.virtual_tokens['_'.join([str(i) for i in tem_arr])]
-            left=c_len-len(tem_tensor)
+            left=c_len-len(tem_tensor)-1
             tem_end=self.end
             if left >0:
-                if left>1:
-                    tem_end=self.zero.repeat(left+(len(tem_arr)-tem_tensor.size(0)), 1) if category[len(category)-left+1]==0 else self.end.repeat(left, 1)
+                tem_end=self.zero.repeat(left, 1) if category[-1]==0 else self.end.repeat(left, 1)
                 tem_end=torch.cat((self.end, tem_end), dim=0)
             batch_tokens.append(torch.cat((tem_tensor, tem_end.detach()), dim=0))
         return torch.stack(batch_tokens)
@@ -101,7 +100,7 @@ class CustomCLIPTextEmbeddings(CLIPTextEmbeddings):
             inputs_embeds = self.token_embedding(input_ids)
 
         if input_ids[0][1] !=49407:
-            categories = input_ids[:, 5:-1].tolist()
+            categories = input_ids[:, 5:].tolist()
             try:
                 input_new= torch.cat([inputs_embeds[:, :5, :].detach(), self.virtual_tokens(categories)], dim=1)
             except RuntimeError as e:
