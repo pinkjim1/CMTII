@@ -21,14 +21,14 @@ inference_model:
 image_encoder:
   lr: 0.0001
   batch_size: 8
-  num_epochs: 1
+  num_epochs: 2
   weight_decay: 0.001
   save_freq: 2
   lora_r: 8
   lora_alpha: 16
   lora_dropout: 0.1
   target_modules: ['k_proj', 'v_proj', 'q_proj']
-  generated_images_weights: 0.001
+  generated_images_weights: 0.1
 
 
 data:
@@ -37,11 +37,11 @@ data:
 client:
   num: 20
   seed: 130
-  p: 0.2
+  p: 0.4
 
 test_result:
   test_result_address: "results.csv"
-  writer: "runs/federated_learning12"
+  writer: "runs/federated_learning_0.3_0.4"
 
 
 

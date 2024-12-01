@@ -103,23 +103,22 @@ class Client:
             return int(file_name.split('_')[1].split('.')[0])
 
         if self.dataset_type=='Tiny-imagenet':
-            self.test_image = []
+            self.test_image_all = []
             val_data_dir=os.path.join('dataset', self.dataset_type, 'rawdata', 'tiny-imagenet-200', 'val', 'images')
             for root, dirs, files in os.walk(val_data_dir):
                 for file in sorted(files, key=numeric_sort):
                     file_path = os.path.join(root, file)
-                    self.test_image.append(file_path)
+                    self.test_image_all.append(file_path)
             with open('src/Tinylist.json', 'r', encoding='utf-8') as file:
                 label_dict= json.load(file)
             val_labal_dir=os.path.join('dataset', self.dataset_type, 'rawdata', 'tiny-imagenet-200', 'val', 'val_annotations.txt')
-            self.test_label = []
+            self.test_label_all = []
             with open(val_labal_dir, 'r') as file:
                 for line in file:
                     parts = line.split()
                     category_id = parts[1]
-                    self.test_label.append(label_dict[category_id])
-        else:
-            self.test_image, self.test_label=self.load_data(test_data_dir, 'test')
+                    self.test_label_all.append(label_dict[category_id])
+        self.test_image, self.test_label=self.load_data(test_data_dir, 'test')
 
         self.writer=writer
 
@@ -339,7 +338,7 @@ class Client:
 
 
     def image_encoder_train(self):
-        # self.cluster()
+        self.cluster()
         clipmodel = CLIPModel.from_pretrained(self.clip_model_path).to(self.device)
         clipprocessor = AutoProcessor.from_pretrained(self.clip_model_path)
         clip_vision_model = CLIPVisionModel.from_pretrained(self.clip_model_path).to(self.device)
@@ -442,6 +441,49 @@ class Client:
             new_row = {"client_id": self.client_id, "round": self.round, "accuracy": accuracy}
             df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
         self.writer.add_scalar(f'Client_{self.client_id}/accuracy', accuracy, self.round)
+        df.to_csv(self.test_result_address, index=False)
+        del clipmodel
+        torch.cuda.empty_cache()
+
+    def model_test_all(self, is_trained=False):
+        clipmodel = CLIPModel.from_pretrained(self.clip_model_path).to(self.device)
+        clipmodel.text_model.embeddings.virtual_tokens = self.vt
+        clipprocessor = AutoProcessor.from_pretrained(self.clip_model_path)
+        if is_trained:
+            clip_vision_model = CLIPVisionModel.from_pretrained(self.clip_model_path).to(self.device)
+            tem_save_path = os.path.join(self.save_model_path, "image_encoder", self.dataset_type,
+                                         str(self.client_id) + "_client_id")
+            new_vision_model = PeftModel.from_pretrained(clip_vision_model, tem_save_path)
+            clipmodel.vision_model = new_vision_model
+        clipmodel.eval()
+        image_dataset = CustomCombineImageDataset(self.test_image_all, self.test_label_all, None)
+        image_dataloader = CustomCombineDataLoader(image_dataset, batch_size=self.image_encoder_batch_size,
+                                                   shuffle=True,
+                                                   preprocess=clipprocessor, total_labels=self.type_list,
+                                                   message_type=self.message_type, device=self.device)
+        correct_predictions = 0
+        total_samples = 0
+        with torch.no_grad():
+            for return_value, labels, _ in image_dataloader:
+                logit = clipmodel(**return_value)
+                predictions = logit.logits_per_image.argmax(dim=-1)
+                correct_predictions += (predictions == labels).sum().item()
+                total_samples += len(labels)
+
+        accuracy = correct_predictions / total_samples
+        if os.path.exists(self.test_result_address):
+            df = pd.read_csv(self.test_result_address)
+        else:
+            df = pd.DataFrame(columns=["client_id", "round", "accuracy"])
+
+        mask = (df["client_id"] == self.client_id) & (df["round"] == self.round)
+
+        if mask.any():
+            df.loc[mask, "accuracy"] = accuracy
+        else:
+            new_row = {"client_id": self.client_id, "round": self.round, "accuracy": accuracy}
+            df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+        self.writer.add_scalar(f'Client_{self.client_id}/all_accuracy', accuracy, self.round)
         df.to_csv(self.test_result_address, index=False)
         del clipmodel
         torch.cuda.empty_cache()

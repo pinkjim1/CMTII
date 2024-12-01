@@ -17,6 +17,7 @@ def decentralized_federated_learning(clients, config_file):
         for i, client in enumerate(new_clients):
             if round ==0 and i==0:
                 client.model_test(is_trained=False)
+                client.model_test_all(is_trained=False)
             client.prompt_train()
 
         # fd train
@@ -25,6 +26,7 @@ def decentralized_federated_learning(clients, config_file):
             client.image_encoder_train()
             if round%2==0 and i<6:
                 client.model_test(is_trained=True)
+                client.model_test_all(is_trained=True)
 
         print("Models exchanged and aggregated.")
 
