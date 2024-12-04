@@ -37,11 +37,11 @@ data:
 client:
   num: 20
   seed: 130
-  p: 0.4
+  p: 1
 
 test_result:
   test_result_address: "results.csv"
-  writer: "runs/federated_learning_0.3_0.4"
+  writer: "runs/federated_learning_0.3_1"
 
 
 
