@@ -48,13 +48,17 @@ def generate_cifar10(dir_path, num_clients, num_classes, niid, balance, partitio
 
     dataset_image = []
     dataset_label = []
+    test_dataset_image = []
+    test_dataset_label = []
 
     dataset_image.extend(trainset.data.cpu().detach().numpy())
-    dataset_image.extend(testset.data.cpu().detach().numpy())
+    test_dataset_image.extend(testset.data.cpu().detach().numpy())
     dataset_label.extend(trainset.targets.cpu().detach().numpy())
-    dataset_label.extend(testset.targets.cpu().detach().numpy())
+    test_dataset_label.extend(testset.targets.cpu().detach().numpy())
     dataset_image = np.array(dataset_image)
     dataset_label = np.array(dataset_label)
+    test_dataset_image=np.array(test_dataset_image)
+    test_dataset_label=np.array(test_dataset_label)
 
     # dataset = []
     # for i in range(num_classes):
@@ -66,6 +70,13 @@ def generate_cifar10(dir_path, num_clients, num_classes, niid, balance, partitio
     train_data, test_data = split_data(X, y)
     save_file(config_path, train_path, test_path, train_data, test_data, num_clients, num_classes, 
         statistic, niid, balance, partition)
+
+    test_dataset_data={'x': test_dataset_image, 'y': test_dataset_label}
+    with open(test_path + 'all' + '.npz', 'wb') as f:
+        np.savez_compressed(f, data=test_dataset_data)
+
+
+
 
 
 if __name__ == "__main__":

@@ -32,16 +32,16 @@ image_encoder:
 
 
 data:
-  dataset_type: "Tiny-imagenet"
+  dataset_type: "Cifar10"
 
 client:
   num: 20
   seed: 130
-  p: 1
+  p: 0.2
 
 test_result:
   test_result_address: "results.csv"
-  writer: "runs/federated_learning_0.3_1"
+  writer: "runs/cifar10_federated_learning_0.1_0.2"
 
 
 

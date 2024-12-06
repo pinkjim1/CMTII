@@ -118,6 +118,11 @@ class Client:
                     parts = line.split()
                     category_id = parts[1]
                     self.test_label_all.append(label_dict[category_id])
+        else:
+            all_test_data_dir = os.path.join('dataset', self.dataset_type, 'test', 'all.npz')
+            self.test_image_all, self.test_label_all = self.load_data(all_test_data_dir, 'test')
+
+
         self.test_image, self.test_label=self.load_data(test_data_dir, 'test')
 
         self.writer=writer
