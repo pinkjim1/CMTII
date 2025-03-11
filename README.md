@@ -8,19 +8,7 @@
 
 ![](image/illustrate.svg)
 
-- This project focuses on enhancing the flow rate between 
-single-modal visual data in federated learning while avoiding large-scale centralized transmission of visual
-data for model training. The core idea is to leverage the data multi-modality.
-As illustrated in the figure above, we differentiate the textual and visual modality 
-based on their sensitivity and volume.
-We propose a Cross-Modality Text-Image interchange (CMTII)
-desensitization method to ensure the privacy and security of visual data. 
-The specific idea is to limit the transmition of sensitive single-modal visual data
- for desensitization prompt learning in client environments. It can directly reduce 
-the flow rate of sensitive visual information, protect the data pravicy of all participants.
-Non-sensitive word embeddings obtained through desensitization prompt learning are transmitted and broadcasted, 
-and after the client receives the word embeddings, they regenerate diversified visual images and jointly 
-balance local data to train the optimal personalized model in federated learing.
+- TFederated learning is a decentralized learning framework that keeps data local and share only the necessary information, such as gradients, prototypes, and parameters. However, the exchange of sensitive information among clients can still negatively impact user privacy. To address this issue, our work seeks to transmit nonsensitive information without compromising privacy in federated learning. The core idea is to exploit data multi-modality by differentiating textual and visual modalities based on their sensitivity and capacity. This differentiation restricts the transmission of sensitive visual data, gradients, and model parameters among clients, while allowing unrestricted exchange of nonsensitive textual pseudo-words with other clients. We expect to directly reduce the flow of sensitive information and meanwhile safeguard the privacy of all clients with only textual pseudo-words exchanged. To this end, we propose a federated Cross-Modality Text-Image Interchange (CMTII) via a lightweight stable diffusion model to ensure privacy and security of private data and local models in clients. First, nonsensitive pseudo-word embeddings in CMTII are obtained through prompt learning, and transmitted and broadcasted to other clients; Second, after the client receives the pseudo-word embeddings, the lightweight diffusion model regenerates diversified visual images, and they finally balance local data to train the optimal model for local personalization and global generalization. Extensive experiments demonstrate the superiority of CMTII in data interchange capacity, communication efficiency, and heterogeneous adaptability.
 
 
 This project includes:
